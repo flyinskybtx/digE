@@ -4,6 +4,8 @@ from gym import spaces
 from gym.utils import seeding
 from tqdm import trange
 
+from utils.viewer import display_coverage
+
 Rs = 0.5
 Ld = Lq = 1e-3
 Phif = 0.07
@@ -76,9 +78,9 @@ class PMSMModel(gym.Env):
 
 
 if __name__ == '__main__':
-    ljw_model = PMSMModel()
-    action_space = ljw_model.action_space
-    state_space = ljw_model.observation_space
+    pmsm = PMSMModel()
+    action_space = pmsm.action_space
+    state_space = pmsm.observation_space
 
     EPISODE_LEN = 10000
 
@@ -90,9 +92,9 @@ if __name__ == '__main__':
     for i in trange(EPISODE_LEN):
         if done:
             cnt += 1
-            obs = ljw_model.reset()
+            obs = pmsm.reset()
         u = action_space.sample()
-        new_obs, _, done, _ = ljw_model.step(u)
+        new_obs, _, done, _ = pmsm.step(u)
 
         Uk.append(u)
         Xk.append(obs)
@@ -101,3 +103,6 @@ if __name__ == '__main__':
         obs = new_obs
 
     print(f"Total {cnt} trials.")
+
+    display_coverage(Uk, (-Umax, Umax), bins=10, name='Uk')
+    display_coverage(Xk, ([-Imax, -Imax, -Omegamax], [Imax, Imax, Omegamax]), bins=10, name='Xk')
