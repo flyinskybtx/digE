@@ -15,6 +15,8 @@ from gym import spaces
 from gym.envs.classic_control.pendulum import PendulumEnv, angle_normalize
 from tqdm import trange
 
+from utils.viewer import display_coverage
+
 
 class CustomPendulum(PendulumEnv):
     def __init__(self, noise_level=0.01, **kwargs):
@@ -89,3 +91,6 @@ if __name__ == '__main__':
         Xk1.append(new_obs)
 
         obs = new_obs
+
+    display_coverage(Uk, (-pendulum.max_torque, pendulum.max_torque), name="Uk")
+    display_coverage(Xk, ([-np.pi, -pendulum.max_speed], [np.pi, pendulum.max_speed]), name="Xk")

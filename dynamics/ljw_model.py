@@ -4,6 +4,8 @@ from gym import spaces
 from gym.utils import seeding
 from tqdm import trange
 
+from utils.viewer import display_coverage
+
 PARAM_SETS = {
     1: {"A": np.array([[0.9, 0, 0.01, 0],
                        [0, 0.9, 0, 0.01],
@@ -81,3 +83,6 @@ if __name__ == '__main__':
         Xk1.append(new_obs)
 
         obs = new_obs
+
+    display_coverage(Uk, (-ljw_model.max_u, ljw_model.max_u), 10, f'Uk')
+    display_coverage(Xk, (-ljw_model.max_state, ljw_model.max_state), 10, f'Xk')
